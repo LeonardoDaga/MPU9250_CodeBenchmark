@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{c18d1b21-5995-48f5-a568-c73cb667bee6}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)arduino_mpu9250_clk.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)arduino_mpu9250_i2c.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)arduino_mpu9250_log.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)inv_mpu.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)inv_mpu_dmp_motion_driver.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MPU9250.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)arduino_mpu9250_clk.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)arduino_mpu9250_i2c.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)arduino_mpu9250_log.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)dmpKey.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)dmpmap.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)inv_mpu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)inv_mpu_dmp_motion_driver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MPU9250.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MPU9250_RegisterMap.h" />
+  </ItemGroup>
+</Project>
