@@ -1,3 +1,5 @@
 /MPU9250_Basic/Debug/*
 /MPU9250_Basic/__vm/*
 /.vs/*
+/MPU9250_Basic_Interrupt/__vm/*
+/MPU9250_Basic_Interrupt/Debug/*

@@ -33,3 +33,14 @@ execution time length.
 ### Results
 * 193 us: imu dataReady check
 * 1260 us: imu update (accel, gyros, mags, temperature)
+
+## Test2: MPU9250_Basic_Interrupt
+
+Example derived by the original SparkfunMPU-9250 library.
+It set sensors, then the interrupt that becomes 1 to
+indicate when new data is ready, then measures the time
+required for checking interrupt and read data.
+
+### Results:
+* 1 us: interrupt check
+* 1263 us: imu update (accel, gyros, mags, temperature)
