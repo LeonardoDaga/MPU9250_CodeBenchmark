@@ -44,3 +44,24 @@ required for checking interrupt and read data.
 ### Results:
 * 1 us: interrupt check
 * 1263 us: imu update (accel, gyros, mags, temperature)
+
+## Test3: MPU9250_FIFO_Basic
+
+Example derived by the original SparkfunMPU-9250 library.
+This example sketch demonstrates how to use the MPU-9250's
+512 byte first-in, first-out (FIFO) buffer. The FIFO can be
+set to store either accelerometer and/or gyroscope (not the
+magnetometer, though :( ).
+
+Timing of the FIFO buffer handling is quite high, because
+the buffer takes time to be filled and in this example 256
+bytes are enough to contain more than one sample.
+Results, from the point of view of the time spent to access
+the FIFO, is absolutely not satisfactory.
+It takes 683us to retrieve the data, but magnetometers and 
+temperature are not available.
+
+### Results:
+- 370 us: fifoAvailable() >= 256
+- 370 us: while (imu.fifoAvailable() > 0)
+- 683 us: imu.updateFifo()

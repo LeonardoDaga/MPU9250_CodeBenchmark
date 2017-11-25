@@ -3,3 +3,5 @@
 /.vs/*
 /MPU9250_Basic_Interrupt/__vm/*
 /MPU9250_Basic_Interrupt/Debug/*
+*/__vm/*
+*/Debug/*
