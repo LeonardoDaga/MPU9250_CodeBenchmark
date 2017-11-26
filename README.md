@@ -65,3 +65,24 @@ temperature are not available.
 - 370 us: fifoAvailable() >= 256
 - 370 us: while (imu.fifoAvailable() > 0)
 - 683 us: imu.updateFifo()
+
+## MPU9250_FIFO_Basic_2
+
+This example shows a better interaction with the fifo buffer.
+FIFO buffer is mainly used to accumulate samples when the 
+processor has no time to manage them.
+Instead of asking every step the number of bytes available,
+the code starts from the assumpion that no further bytes 
+add to the buffer while parsing the FIFO.
+At this time, I didn't find a way to retrieve also magnetometers, 
+even at lower frequency or not using FIFO, when FIFO is used 
+for acceleometers and gyros. 
+
+Timing of the FIFO buffer handling is quite high, no gain
+is achieved respect to the interrupt case. This is a limit
+of the I2C bus that cannot transmit data in background.
+
+### Results:
+- 370 us: fifoAvailable() >= 12
+- 685 us: imu.updateFifo()
+- 211 us: imu.updateTemperature();

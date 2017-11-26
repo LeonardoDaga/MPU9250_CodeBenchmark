@@ -18,8 +18,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPU9250_Basic_Interrupt", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPU9250_FIFO_Basic", "MPU9250_FIFO_Basic\MPU9250_FIFO_Basic.vcxproj", "{88558613-BDBE-4121-96B3-FE3F4C4DFF85}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPU9250_FIFO_Basic_2", "MPU9250_FIFO_Basic_2\MPU9250_FIFO_Basic_2.vcxproj", "{253D2B7C-8A4D-409E-BFDD-6B9514289EF1}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Common\Common.vcxitems*{253d2b7c-8a4d-409e-bfdd-6b9514289ef1}*SharedItemsImports = 4
+		MPU9250\MPU9250.vcxitems*{253d2b7c-8a4d-409e-bfdd-6b9514289ef1}*SharedItemsImports = 4
 		Common\Common.vcxitems*{579eb5cc-01f7-403e-b5ad-29a3921d69ff}*SharedItemsImports = 9
 		Common\Common.vcxitems*{88558613-bdbe-4121-96b3-fe3f4c4dff85}*SharedItemsImports = 4
 		MPU9250\MPU9250.vcxitems*{88558613-bdbe-4121-96b3-fe3f4c4dff85}*SharedItemsImports = 4
@@ -46,6 +50,10 @@ Global
 		{88558613-BDBE-4121-96B3-FE3F4C4DFF85}.Debug|x86.Build.0 = Debug|Win32
 		{88558613-BDBE-4121-96B3-FE3F4C4DFF85}.Release|x86.ActiveCfg = Release|Win32
 		{88558613-BDBE-4121-96B3-FE3F4C4DFF85}.Release|x86.Build.0 = Release|Win32
+		{253D2B7C-8A4D-409E-BFDD-6B9514289EF1}.Debug|x86.ActiveCfg = Debug|Win32
+		{253D2B7C-8A4D-409E-BFDD-6B9514289EF1}.Debug|x86.Build.0 = Debug|Win32
+		{253D2B7C-8A4D-409E-BFDD-6B9514289EF1}.Release|x86.ActiveCfg = Release|Win32
+		{253D2B7C-8A4D-409E-BFDD-6B9514289EF1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

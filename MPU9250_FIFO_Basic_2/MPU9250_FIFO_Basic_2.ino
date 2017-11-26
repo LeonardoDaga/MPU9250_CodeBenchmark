@@ -1,21 +1,24 @@
 /************************************************************
-MPU9250_FIFO_Basic
+MPU9250_FIFO_Basic_2
 
-This example sketch demonstrates how to use the MPU-9250's
-512 byte first-in, first-out (FIFO) buffer. The FIFO can be
-set to store either accelerometer and/or gyroscope (not the
-magnetometer, though :( ).
+This example shows a better interaction with the fifo buffer.
+FIFO buffer is mainly used to accumulate samples when the 
+processor has no time to manage them.
+Instead of asking every step the number of bytes available,
+the code starts from the assumpion that no further bytes 
+add to the buffer while parsing the FIFO.
+At this time, I didn't find a way to retrieve also magnetometers, 
+even at lower frequency or not using FIFO, when FIFO is used 
+for acceleometers and gyros. 
 
-Timing of the FIFO buffer handling is quite high, because
-the buffer takes time to be filled and in this example 256
-bytes are enough to contain more than one sample.
-Results, from the point of view of the time spent to access
-the FIFO, is absolutely not satisfactory.
+Timing of the FIFO buffer handling is quite high, no gain
+is achieved respect to the interrupt case. This is a limit
+of the I2C bus that cannot transmit data in background.
 
 Results:
-- 370 us: fifoAvailable() >= 256
-- 370 us: while (imu.fifoAvailable() > 0)
-- 683 us: imu.updateFifo()
+- 370 us: fifoAvailable() >= 12
+- 685 us: imu.updateFifo()
+- 211 us: imu.updateTemperature();
 
 Acknowledges:
 Original code by Jim Lindblom @ SparkFun Electronics
@@ -25,6 +28,7 @@ https://github.com/sparkfun/SparkFun_MPU9250_DMP_Arduino_Library
 #include "MPU9250.h"
 
 #define SerialPort SerialUSB
+#define MSG_SIZE 12
 
 MPU9250_DMP imu;
 
@@ -77,35 +81,47 @@ void setup()
 }
 
 unsigned int t[5];
+int bytes = 0;
 
 void loop()
 {
 	// fifoAvailable returns the number of bytes in the FIFO
-	// The FIFO is 512 bytes max. We'll read when it reaches
-	// half of that.
+	// The FIFO is 512 bytes max. We'll read when there is 
+	// at least one message
 	t[0] = micros();
-	if (imu.fifoAvailable() >= 256)
+	if ((bytes = imu.fifoAvailable()) >= 12)
 	{
 		t[1] = micros();
-		// Then read while there is data in the FIFO
-		while (imu.fifoAvailable() > 0)
+
+		// Loop until there are more than twelve bytes in the FIFO
+		while (bytes >= 12)
 		{
-			t[2] = micros();
 			// Call updateFifo to update ax, ay, az, gx, gy, and/or gz
 			if (imu.updateFifo() == INV_SUCCESS)
 			{
+				t[2] = micros();
+
+				// Here we retrieve the temperature, at least, using 
+				// the normal I2C channel
+				imu.updateTemperature();
+
 				t[3] = micros();
 				printTiming(3);
 				printIMUData();
+
+				// Decrease buffer size for read bytes
+				bytes -= 12;
 			}
 			else
 			{
-				t[3] = micros();
-				printTiming(3);
+				// bytes available are more than required (12) but
+				// still it doesn't contains a full message.
+				// exit the while loop
+				t[2] = micros();
+				printTiming(2);
+				break;
 			}
 		}
-		t[2] = micros();
-		printTiming(2);
 	}
 	else
 	{
@@ -119,8 +135,11 @@ void printTiming(int mpuRead)
 	for (int i = 1; i <= mpuRead; i++)
 	{
 		if (i == 1)
-			SerialPort.printf("0-1=%d",
+			SerialPort.printf("L:0-1=%d",
 				t[i] - t[i - 1]);
+		else if (i == 2)
+			SerialPort.printf(";(%d)%d-%d=%d",
+				bytes, i, i - 1, t[i] - t[i - 1]);
 		else
 			SerialPort.printf(";%d-%d=%d",
 				i, i - 1, t[i] - t[i - 1]);
@@ -134,9 +153,6 @@ void printIMUData(void)
 {
 	if (printCount++ % 10 != 0)
 		return;
-
-	// After calling update() the internal imu data is 
-	// updated. 
 
 	// Use the getData function to convert and retrieve 
 	// sensor readings in their respective physical units.
