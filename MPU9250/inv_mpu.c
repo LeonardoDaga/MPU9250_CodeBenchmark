@@ -862,6 +862,37 @@ int mpu_get_accel_reg(short *data, unsigned long *timestamp)
 }
 
 /**
+*  @brief      Read all data directly from the registers.
+*  @param[out] data        Raw data in hardware units.
+*  @param[out] timestamp   Timestamp in milliseconds. Null if not needed.
+*  @return     0 if successful.
+*/
+int mpu_get_all_reg(short *data, unsigned long *timestamp)
+{
+	unsigned char tmp[20];
+
+	if (i2c_read(st.hw->addr, st.reg->raw_accel, 20, tmp))
+		return -1;
+	// Accelerometers
+	data[0] = (tmp[0] << 8) | tmp[1];
+	data[1] = (tmp[2] << 8) | tmp[3];
+	data[2] = (tmp[4] << 8) | tmp[5];
+	// Temperature
+	data[3] = (tmp[6] << 8) | tmp[7];
+	// Gyros
+	data[4] = (tmp[8] << 8) | tmp[9];
+	data[5] = (tmp[10] << 8) | tmp[11];
+	data[6] = (tmp[12] << 8) | tmp[13];
+	// Magnetometer
+	data[7] = (tmp[15] << 8) | tmp[14];
+	data[8] = (tmp[17] << 8) | tmp[16];
+	data[9] = (tmp[19] << 8) | tmp[18];
+	if (timestamp)
+		get_ms(timestamp);
+	return 0;
+}
+
+/**
  *  @brief      Read temperature data directly from the registers.
  *  @param[out] data        Data in q16 format.
  *  @param[out] timestamp   Timestamp in milliseconds. Null if not needed.

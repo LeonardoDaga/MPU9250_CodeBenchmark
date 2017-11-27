@@ -82,6 +82,7 @@ private:
 	int ax, ay, az;
 	int gx, gy, gz;
 	long temperature;
+	int temp;
 
 public:
 	int mx, my, mz;
@@ -202,6 +203,7 @@ public:
 	inv_error_t updateGyro(void);
 	inv_error_t updateCompass(void);
 	inv_error_t updateTemperature(void);
+	inv_error_t updateAll(void);
 
 	// configureFifo(unsigned char) -- Initialize the FIFO, set it to read from
 	// a select set of sensors.
@@ -367,6 +369,7 @@ public:
 	// getData -- Convert 16-bit signed sensor values to 
 	// their corresponding physical values
 	void getData(float a[3], float g[3], float m[3], float &T);
+	void getDataAll(float a[3], float g[3], float m[3], float &T);
 
 	// computeEulerAngles -- Compute euler angles based on most recently read qw, qx, qy, and qz
 	// Input: boolean indicating whether angle results are presented in degrees or radians

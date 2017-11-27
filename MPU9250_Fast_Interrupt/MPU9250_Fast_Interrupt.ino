@@ -1,19 +1,13 @@
 /************************************************************
-MPU9250_Basic_Interrupt
+MPU9250_Fast_Interrupt
 
-Example derived by the original SparkfunMPU-9250 library.
-It set sensors, then the interrupt that becomes 1 to
-indicate when new data is ready, then measures the time
-required for checking interrupt and read data.
+Same approach as the Basic_Interrupt, but now the call doesn't 
+waste time in multiple calls, retrieving all the 20 bytes in 
+one shot. 
 
 Results:
 - 1 us: interrupt check
-- 1263 us: imu update (accel, gyros, mags, temperature)
-
-Acknowledges:
-Original code by Jim Lindblom @ SparkFun Electronics
-original creation date: November 23, 2016
-https://github.com/sparkfun/SparkFun_MPU9250_DMP_Arduino_Library
+- 712 us: imu update (accel, gyros, mags, temperature)
 *************************************************************/
 #include "MPU9250.h"
 
@@ -90,8 +84,11 @@ void loop()
 	if (digitalRead(INTERRUPT_PIN) == LOW)
 	{
 		t[1] = micros();
-		// Call update() to update the imu objects sensor data.
-		imu.update
+
+		// Here we have the same approach as the one based on the
+		// interrupt, but now the call (updateAll) invokes a 
+		// function that reads all data in one call (20 bytes)
+		imu.updateAll();
 
 		t[2] = micros();
 		printTiming(true);
@@ -113,8 +110,11 @@ void printTiming(bool mpuRead)
 	}
 	else
 	{
-		SerialPort.printf("T:t0-1=%d\r\n",
-			t[1] - t[0]);
+		if (t[1] - t[0] > 1)
+		{
+			SerialPort.printf("T:t0-1=%d\r\n",
+				t[1] - t[0]);
+		}
 	}
 }
 
@@ -131,7 +131,7 @@ void printIMUData(void)
 	// Use the getData function to convert and retrieve 
 	// sensor readings in their respective physical units.
 	float a[3], g[3], m[3], T;
-	imu.getData(a, g, m, T);
+	imu.getDataAll(a, g, m, T);
 
 	SerialPort.printf("MPU:a=[% 03.2f,% 03.2f,% 03.2f]g,",
 		a[X_AXIS], a[Y_AXIS], a[Z_AXIS]);

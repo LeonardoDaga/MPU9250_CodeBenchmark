@@ -365,6 +365,27 @@ inv_error_t MPU9250_DMP::updateTemperature(void)
 	return mpu_get_temperature(&temperature, &time);
 }
 
+inv_error_t MPU9250_DMP::updateAll(void)
+{
+	short data[10];
+
+	if (mpu_get_all_reg(data, &time))
+	{
+		return INV_ERROR;
+	}
+
+	ax = data[0];
+	ay = data[1];
+	az = data[2];
+	temp = data[3];
+	gx = data[4];
+	gy = data[5];
+	gz = data[6];
+	mx = data[7];
+	my = data[8];
+	mz = data[9];
+}
+
 int MPU9250_DMP::selfTest(unsigned char debug)
 {
 	long gyro[3], accel[3];
@@ -613,6 +634,19 @@ void MPU9250_DMP::getData(float a[3], float g[3], float m[3], float &T)
 	T = ((float)temperature / 65535.f - 35.f)*321.f / 333.87 + 21.f;
 }
 
+void MPU9250_DMP::getDataAll(float a[3], float g[3], float m[3], float &T)
+{
+	a[X_AXIS] = (float)ax / (float)_aSense;
+	a[Y_AXIS] = (float)ay / (float)_aSense;
+	a[Z_AXIS] = (float)az / (float)_aSense;
+	g[X_AXIS] = (float)gx / (float)_gSense;
+	g[Y_AXIS] = (float)gy / (float)_gSense;
+	g[Z_AXIS] = (float)gz / (float)_gSense;
+	m[X_AXIS] = (float)mx / (float)_mSense;
+	m[Y_AXIS] = (float)my / (float)_mSense;
+	m[Z_AXIS] = (float)mz / (float)_mSense;
+	T = (float)temp;
+}
 
 float MPU9250_DMP::calcQuat(long axis)
 {

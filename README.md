@@ -86,3 +86,13 @@ of the I2C bus that cannot transmit data in background.
 - 370 us: fifoAvailable() >= 12
 - 685 us: imu.updateFifo()
 - 211 us: imu.updateTemperature();
+
+## MPU9250_Fast_Interrupt
+
+Same approach as the Basic_Interrupt, but now the call doesn't 
+waste time in multiple calls, retrieving all the 20 bytes in 
+one shot. 
+
+### Results:
+- 1 us: interrupt check
+- 712 us: imu update (accel, gyros, mags, temperature)

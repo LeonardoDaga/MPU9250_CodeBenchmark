@@ -72,6 +72,7 @@ void setup()
 
 	// Magnetometer and temperature sensor cannot be retrieved 
 	// using the FIFO
+	imu.
 
 	// Use configureFifo to set which sensors should be stored
 	// in the buffer.  
